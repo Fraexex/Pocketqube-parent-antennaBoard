@@ -52,7 +52,7 @@ This run is retained as evidence that the analytical radius must be used as a ti
     \item \textbf{Rectangular / Patch 2} (\texttt{Patch 2.aedt}, \texttt{99f9ccd}--\texttt{7263f00}): early sweep of a rectangular patch with slot. $S_{11}$ minima were found near 2.3~GHz but with narrow 10~MHz bandwidth and strong sensitivity to $h$, consistent with the cavity bandwidth estimate of 1--2\%.
     \item \textbf{Hexagonal patch} (\texttt{HexagonalPatch.aedt}, \texttt{5b98260}): hexagonal truncation reduced the circumscribed area by $\approx 15\%$ but introduced $\mathrm{TM}_{21}$ coupling that degraded axial ratio above 6~dB in simulation. The geometry was abandoned.
     \item \textbf{Circular patch, single feed} (\texttt{CircularPatch.aedt}, \texttt{fad1ff9}): single probe at $\rho_0 \approx 5$~mm yielded $S_{11} < -14$~dB at 2.305~GHz, gain $\sim 4$~dBi, linear polarization. Used to calibrate the effective radius correction.
-    \item \textbf{Circular patch V3, dual coax} (\texttt{CircularPatchV3.aedt}, \texttt{235c732}): two orthogonal probes at $(\pm\rho_0,0)$ and $(0,\pm\rho_0)$ with independent wave ports. This is the geometry exported to KiCAD. With $\rho_0$ tuned to match 50~$\Omega$, simulation shows $S_{11} < -10$~dB for each port in isolation, inter-port coupling below $-18$~dB, and axial ratio below 3~dB when ports are driven in quadrature (see Discussion). The DXF exported for KiCAD (\texttt{KiCAD/CircularPatchV3.dxf}) and the STEP model (\texttt{KiCAD/CircularPatchV3.step}, added \texttt{2f72509}) are direct outputs of this AEDT project.
+    \item \textbf{Circular patch V3, dual coax} (\texttt{CircularPatchV3.aedt}, \texttt{235c732}): two orthogonal probes at $(\pm\rho_0,0)$ and $(0,\pm\rho_0)$ with independent wave ports. This is the geometry exported to KiCAD. With $\rho_0$ tuned to match 50~$\Omega$, simulation shows $S_{11} < -10$~dB for each port in isolation, inter-port coupling below $-18$~dB, and axial ratio below 3~dB when ports are driven in quadrature (see Discussion). The DXF exported for KiCAD (\path{KiCAD/CircularPatchV3.dxf}) and the STEP model (\path{KiCAD/CircularPatchV3.step}, added \texttt{2f72509}) are direct outputs of this AEDT project.
 \end{itemize}
 
 All HFSS projects use a radiation boundary offset $\lambda_0/4 \approx 32.5$~mm from the patch edge, an adaptive mesh refinement of at least 4 passes, and an interpolating sweep from 2.2 to 2.4~GHz with 401 points. Convergence criterion is $\Delta S < 0.02$.
@@ -61,9 +61,76 @@ All HFSS projects use a radiation boundary offset $\lambda_0/4 \approx 32.5$~mm 
 
 The HFSS-tuned physical radius for FR-408HR converges to $19.0$--$19.5$~mm, within $0.5$~mm of the analytical $a=19.87$~mm from Table~\ref{tab:radius}. The difference is attributable to the finite ground plane ($51.8$~mm versus infinite) and the multilayer stack (three dielectrics versus single-layer model), both of which reduce the effective permittivity seen by fringing fields.
 
+\section{Visual History of Patch Evolution}
+
+A chronological set of HFSS screenshots is retained in \path{doc/history/}. Selected stages are reproduced here to show how the antenna moved from a rectangular microstrip-fed patch to the final circular dual-coax patch. The chat history in \path{history/chat-history.txt} informed feed, substrate, and stackup choices but is not quoted verbatim.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{history/10-30-2025-1.png}
+\caption{Rectangular patch iteration}
+\label{fig:hist-2025-10-30}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{history/11-06-2025-1.png}
+\caption{Gain, rectangular patch}
+\label{fig:hist-2025-11-06-gain}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{history/11-20-2025-1.png}
+\caption{S11, rectangular patch}
+\label{fig:hist-2025-11-20-s11}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{history/11-20-2025-2.png}
+\caption{Gain, rectangular patch}
+\label{fig:hist-2025-11-20-gain}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{history/04-07-2026-1.png}
+\caption{Circular patch design parameters}
+\label{fig:hist-2026-04-07-table}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{history/04-07-2026-2.png}
+\caption{S11, final circular patch}
+\label{fig:hist-2026-04-07-s11}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{history/04-07-2026-3.png}
+\caption{3D gain, final circular patch}
+\label{fig:hist-2026-04-07-gain3d}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{history/04-07-2026-5.png}
+\caption{Axial ratio vs theta}
+\label{fig:hist-2026-04-07-ar}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{history/04-07-2026-6.png}
+\caption{HFSS model, final circular patch}
+\label{fig:hist-2026-04-07-model}
+\end{figure}
+
 \section{KiCAD Board Implementation}
 
-The final board (\texttt{KiCAD/antennaBoard/antennaBoard.kicad\_pcb}, rev. \texttt{5554f5c}) contains three footprints: \texttt{ANT1} (Inspirefly:CircularPatchAntenna) at $(157.99, 98.55)$~mm, and two Molex 732511350 U.FL-compatible connectors J1/J2 on F.Cu. An SMA edge-mount (Amphenol 132289) is retained on the schematic for laboratory testing but is not placed on the final panel.
+The final board (\path{KiCAD/antennaBoard/antennaBoard.kicad_pcb}, rev. \texttt{5554f5c}) contains three footprints: \texttt{ANT1} (\texttt{Inspirefly:CircularPatchAntenna}) at $(157.99, 98.55)$~mm, and two Molex 732511350 U.FL-compatible connectors J1/J2 on F.Cu. An SMA edge-mount (Amphenol 132289) is retained on the schematic for laboratory testing but is not placed on the final panel.
 
 Key construction:
 
@@ -75,7 +142,48 @@ Key construction:
     \item External feed network: the two U.FL ports are intended to connect via phase-matched coax to the APS-02-WBM-LP-DF-CC 2-way $0^{\circ}/90^{\circ}$ divider, which provides the quadrature phase for RHCP. Measured insertion loss of the divider (vendor data: $\sim 0.4$~dB) and cable loss are budgeted separately from antenna gain.
 \end{itemize}
 
-The DXF-to-footprint flow was validated by re-importing the generated \texttt{CircularPatchAntenna.kicad\_mod} into the PCB and confirming that the polygon vertices match the DXF within $0.01$~mm. Footprint origins are at the patch centre; placement at $(157.99, 98.55)$~mm centres the patch on the 50~mm board.
+% Source - https://tex.stackexchange.com/a/282878
+% Posted by Fran, modified by community. See post 'Timeline' for change history
+% Retrieved 2026-09-07, License - CC BY-SA 3.0
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.48\linewidth}
+\centering
+\includegraphics[width=\linewidth]{history/4-29-2026-1.png}
+\caption{F.Cu view}
+\label{fig:kicad-2026-04-29-top}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.48\linewidth}
+\centering
+\includegraphics[width=\linewidth]{history/4-29-2026-3.png}
+\caption{F.Cu 3D view}
+\label{fig:kicad-2026-04-29-3d-top}
+\end{subfigure}
+\caption{KiCAD F.Cu views}
+\label{fig:kicad-2026-04-29-fcu-pair}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\begin{subfigure}{0.48\linewidth}
+\centering
+\includegraphics[width=\linewidth]{history/4-29-2026-2.png}
+\caption{B.Cu view}
+\label{fig:kicad-2026-04-29-top-conn}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.48\linewidth}
+\centering
+\includegraphics[width=\linewidth]{history/4-29-2026-4.png}
+\caption{B.Cu 3D view}
+\label{fig:kicad-2026-04-29-3d-bottom}
+\end{subfigure}
+\caption{KiCAD B.Cu views}
+\label{fig:kicad-2026-04-29-bcu-pair}
+\end{figure}
+
+The DXF-to-footprint flow was validated by re-importing the generated \path{CircularPatchAntenna.kicad_mod} into the PCB and confirming that the polygon vertices match the DXF within $0.01$~mm. Footprint origins are at the patch centre; placement at $(157.99, 98.55)$~mm centres the patch on the 50~mm board.
 
 \nomenclature{RHCP}{Right-Hand Circular Polarization}
 \nomenclature{U.FL}{Ultra Flat Light coaxial connector standard}

@@ -85,6 +85,13 @@ Total & & 1.3414 & \\
 
 The RF patch resides on F.Cu; In1.Cu and In2.Cu are used for routing and shielding; B.Cu is the solid ground plane. Two through-vias (pad $0.6$~mm, drill $0.3$~mm) connect each coax centre conductor from the patch layer to the feed network on B.Cu. The MATLAB exploration model (\texttt{matlab/MPA\_opt\_swrm.m}) approximates this stack as a single dielectric of $h=0.0994$~mm, $\epsilon_r=4.0$, $\tan\delta=0$ with 0.035~mm copper, which is thinner than the fabricated stack and represents a conservative bandwidth estimate.
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.92\textwidth]{history/10-15-2025.png}
+\caption{Earliest HFSS model}
+\label{fig:hist-2025-10-15}
+\end{figure}
+
 \section{MATLAB Rapid Exploration}
 
 Rapid design-space exploration was performed in MATLAB R2024b Antenna Toolbox (\texttt{matlab/MPA\_opt\_swrm.m}). The script builds a \texttt{pcbStack} with a rectangular board of side $1.5\,W$ and a square patch of side $W$ with two opposite corners truncated by $45^{\circ}$ squares of side $W\sqrt{2}\,\times\mathrm{PatchFrac}$. This chamfered microstrip patch antenna (CMPA) is a rectangular analogue of the circular patch with truncated corners for circular polarization; it was used because \texttt{pcbStack} does not natively support an arbitrary circular polygon with vias in the optimization loop, while still capturing the dependence of gain, return loss, and axial ratio on size, truncation, and feed position.
@@ -121,17 +128,21 @@ Each model defines the patch radius as a design variable, the FR-408HR (or early
 
 \section{KiCAD Layout and DXF Flow}
 
-Layout is implemented in KiCAD 10.0 (\texttt{KiCAD/antennaBoard/}). The patch geometry is drawn in a mechanical CAD tool and exported as \texttt{KiCAD/CircularPatchV3.dxf}. A Python utility \texttt{KiCAD/antennaBoard/dxf\_to\_kicad\_mod/dxf\_to\_kicad\_mod.py} converts the DXF polygon to the KiCAD footprint \texttt{Inspirefly.pretty/CircularPatchAntenna.kicad\_mod}. The footprint defines a single SMD pad (number 1) with a custom polygonal shape: an approximately 38~mm diameter circle formed by $\sim$140 vertices, with two 5.16~mm wide slot cutouts that define the linear slot perimeter referenced in the early calculation. The courtyard is $51.85 \times 51.89$~mm, aligned to the PocketQube 50~mm envelope with margin.
+Layout is implemented in KiCAD 10.0 (\path{KiCAD/antennaBoard/}). The patch geometry is drawn in a mechanical CAD tool and exported as \path{KiCAD/CircularPatchV3.dxf}. A Python utility \path{KiCAD/antennaBoard/dxf_to_kicad_mod/dxf_to_kicad_mod.py} converts the DXF polygon to the KiCAD footprint \path{Inspirefly.pretty/CircularPatchAntenna.kicad_mod}. The footprint defines a single SMD pad (number 1) with a custom polygonal shape: an approximately 38~mm diameter circle formed by $\sim$140 vertices, with two 5.16~mm wide slot cutouts that define the linear slot perimeter referenced in the early calculation. The courtyard is $51.85 \times 51.89$~mm, aligned to the PocketQube 50~mm envelope with margin.
 
 The schematic (\texttt{antennaBoard.kicad\_sch}) contains:
 
 \begin{itemize}[noitemsep]
     \item \texttt{ANT1} -- the circular patch antenna footprint.
-    \item Two \texttt{Conn\_Coaxial} symbols (J1, J2) mapped to Molex 732511350 U.FL-compatible footprints (\texttt{Connector\_Coaxial.pretty/CONN\_732511350\_MOL.kicad\_mod}), added in commit \texttt{5554f5c} with the note ``Use external power divider: APS-02-WBM-LP-DF-CC''.
+    \item Two \texttt{Conn\_Coaxial} symbols (J1, J2) mapped to Molex 732511350 U.FL-compatible footprints (\path{Connector_Coaxial.pretty/CONN_732511350_MOL.kicad_mod}), added in commit \texttt{5554f5c} with the note ``Use external power divider: APS-02-WBM-LP-DF-CC''.
     \item An SMA edge-mount (Amphenol 132289) retained as an alternative test port.
 \end{itemize}
 
 The two coax centre pins are routed on B.Cu to the patch vias; the ground shells connect to the B.Cu ground plane with stitching vias. Design-rule checks enforce 0.2~mm trace width and 0.3~mm drill. Gerber export uses the KiCAD 10.0 \texttt{pcbplotparams} with Gerber X2 attributes and Excellon drill.
+
+\section{Version Control and Archived Iterations}
+
+Historical HFSS screenshots retained in \texttt{doc/history/} complement git history. Early iterations (\texttt{10-30-2025-1.png} to \texttt{11-06-2025-1.png}) capture the rectangular patch with microstrip feed, slit tuning, and copper thickness experiments; later captures (\texttt{04-07-2026-*} ) document the converged circular patch on Isola FR408HR. These images are referenced in Chapter~3 and provide a visual timeline alongside the AEDT files.
 
 \section{Version Control}
 
