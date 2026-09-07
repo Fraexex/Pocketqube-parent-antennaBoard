@@ -1,0 +1,771 @@
+Here is the file of test I have done so far... by Salvetti, Alek
+Salvetti, Alek
+10/5/2025 8:25 PM
+
+Here is the file of test I have done so far with the patch antennas, the MATLAB files are all in the zip:
+
+Antenna_minimalistic.mat is the template patch antenna that I tried to use. You can open it with the PCB antenna designer toolbox in matlab. You could try using the built it optimizer to see if you could get it to work (didn't work for me 2 months ago, but they updated it, I think)
+MPA_opt_swrm.m is the swarm optimizer code. You could try tweaking some of the values to see if you get a better result. Just make sure to increase the MaxIterations and swarm size to ~100 to get good results. 
+best.txt best stats I got so far with the swarm optimizer
+
+👍
+1 Like reaction.
+
+Message by Salvetti, Alek, has an attachment.
+Salvetti, Alek
+10/5/2025 8:28 PM
+
+MatlabMPA.zip
+
+
+You could also try some different shapes or... by Salvetti, Alek
+Salvetti, Alek
+10/5/2025 8:29 PM
+
+You could also try some different shapes or try two input feeds. Just size requirements is 5x5 cm.
+
+This one has some cool circularly polarized... by Salvetti, Alek, has an attachment.
+Salvetti, Alek
+10/5/2025 8:31 PM
+
+This one has some cool circularly polarized shapes in chapter 8. But no actual equations on how to get the specific sizes.
+
+Broadband Microstrip Antennas.pdf
+
+
+
+You could also try some software such as Si... by Salvetti, Alek
+Salvetti, Alek
+10/5/2025 8:33 PM
+
+You could also try some software such as Siemens electronics for simulating it. I saw some tutorials with it to make patch antennas, but not at our frequencies.
+
+Salvetti, Alek added Wyman, Shane to the chat and shared all chat history.
+Videos from Prof Ellingson Link https://www... by Salvetti, Alek
+Salvetti, Alek
+10/6/2025 3:19 PM
+
+Videos from Prof Ellingson
+https://www.youtube.com/watch?v=p5fqlD5Wnp8
+
+https://www.youtube.com/watch?v=dN7eW62tG3A
+
+Url Preview for  - YouTube
+- YouTube
+Enjoy the videos and music you love, upload original content, and share it all with friends, family, and the world on YouTube.
+
+nam04.safelinks.protection.outlook.com
+Working code: by Salvetti, Alek
+Salvetti, Alek
+10/7/2025 5:03 PM
+
+Working code:
+
+%% CMPA Optimization with Particle Swarm %... by Salvetti, Alek
+Salvetti, Alek
+10/7/2025 5:03 PM
+
+%% CMPA Optimization with Particle Swarm
+
+% Brute Forcing this
+
+clc; clearvars; close all;
+
+ 
+
+logfile = nextLogFile();
+
+fid = fopen(logfile,'w');   % open for writing
+
+fprintf(fid, "Starting run: %s\n\n", datetime("now"));
+
+fprintf("Available Cores: %d\n", str2double(getenv('SLURM_CPUS_PER_TASK')));
+
+ 
+
+if isempty(gcp('nocreate'))
+
+    parpool('local', str2double(getenv('SLURM_CPUS_PER_TASK')));
+
+end
+
+ 
+
+%delete(gcp('nocreate'))
+
+%parpool('local', 6)
+
+ 
+
+ 
+
+%% Fixed Parameters
+
+freq              = 2305e6;               
+
+metal_thickness   = 0.0350e-3;               % copper thickness [m]
+
+dielectric_thick  = 0.0994e-3;               % substrate thickness [m]
+
+eps_r             = 4;                     % dielectric constant
+
+tan_delta         = 0;                       % loss tangent
+
+maxBoardW         = 50e-3;                  % for area normalization [m]
+
+ 
+
+% Material objects
+
+DielectricLayer = dielectric("Name","Custom", ...
+
+    "EpsilonR",eps_r,"LossTangent",tan_delta);
+
+Copper = metal("Name","Copper", ...
+
+    "Conductivity",59.6e6,"Thickness",metal_thickness);
+
+ 
+
+%% Optimization using Particle Swarm
+
+lb = [10e-3, 0.01, -0.9];
+
+ub = [maxBoardW, 0.5, 0.9];
+
+ 
+
+opts = optimoptions("particleswarm", ...
+
+    "Display","iter", ...
+
+    "SwarmSize",400, ...
+
+    "MaxIterations",1000, ...
+
+    "UseParallel",true, ...
+
+    "OutputFcn",@(varargin) outfun(varargin{:},fid));
+
+ 
+
+fprintf("Starting optimization...\n");
+
+fflush(stdout);
+
+ 
+
+[x_opt, fval] = particleswarm(@(x) costFunc(x, freq, metal_thickness, dielectric_thick, DielectricLayer, Copper, maxBoardW), ...
+
+    3, lb, ub, opts);
+
+ 
+
+Board_W_opt   = x_opt(1);
+
+PatchFrac_opt = x_opt(2);
+
+FeedFrac_opt  = x_opt(3);
+
+ 
+
+fprintf("Optimized variables:\n");
+
+fprintf("  Board_W   = %.3f mm\n", Board_W_opt*1e3);
+
+fprintf("  PatchFrac = %.3f\n", PatchFrac_opt);
+
+fprintf("  FeedFrac  = %.3f\n\n", FeedFrac_opt);
+
+ 
+
+ 
+
+%% Evaluate optimized design
+
+pcb_opt = buildAntenna(Board_W_opt, PatchFrac_opt, FeedFrac_opt, ...
+
+    freq, metal_thickness, dielectric_thick, DielectricLayer, Copper);
+
+GdBi = pattern(pcb_opt, freq, 0, 0, 'Type','gain');
+
+Zopt     = impedance(pcb_opt, freq);
+
+s11_opt  = sparameters(pcb_opt, freq).Parameters(1,1,1);
+
+RLopt    = -20*log10(abs(s11_opt));
+
+ARopt    = axialRatio(pcb_opt, freq, 0, 0);
+
+ 
+
+fprintf(fid, "\nOptimized variables:\n");
+
+fprintf(fid, " Board_W = %.10f mm\n", Board_W_opt*1e3);
+
+fprintf(fid, " PatchFrac = %.10f\n", PatchFrac_opt);
+
+fprintf(fid, " FeedFrac = %.10f\n\n", FeedFrac_opt);
+
+ 
+
+fprintf(fid, "Optimized performance:\n");
+
+fprintf(fid, " Gain = %.2f dBi\n", GdBi);
+
+fprintf(fid, " |Z| = %.1f Ω (Z = %.1f + j%.1f Ω)\n", abs(Zopt), real(Zopt), imag(Zopt));
+
+fprintf(fid, " RL = %.2f dB\n", RLopt);
+
+fprintf(fid, " AR(b) = %.2f dB\n\n", ARopt);
+
+ 
+
+fclose(fid);
+
+ 
+
+%% Cost Function with S11, Area penalty, and AR target
+
+function c = costFunc(x, freq, t_met, t_diel, dielLayer, metalLayer, maxW)
+
+ 
+
+    % Target:
+
+    % Target values for optimization
+
+    targetGain = 5;  % dBi
+
+    targetRL = -10;  % dB
+
+    targetAR = 3;    % dB
+
+ 
+
+ 
+
+    BW = x(1); PF = x(2); FF = x(3);
+
+    pcb = buildAntenna(BW, PF, FF, freq, t_met, t_diel, dielLayer, metalLayer);
+
+    P    = pattern(pcb, freq, 0:10:360, 0:10:180, 'Type','gain'); GdBi = max(P(:));
+
+    Zmag = abs(impedance(pcb, freq));
+
+    ARdB = axialRatio(pcb, freq, 0, 0);
+
+    RLdB = -20*log10(abs(sparameters(pcb, freq).Parameters(1,1,1)));
+
+    % Normalize & cost terms
+
+    c_gain = max(0, (targetGain - GdBi)/5);      % reward if gain < 5 dBi
+
+    c_imp  = abs(Zmag - 50)/50;         % impedance mismatch
+
+    c_ar   = max(0, (ARdB - targetAR)/3);      % AR > 3 dB penalty
+
+    c_rl   = max(0, (targetRL - RLdB))/10;    % RL < -10 dB penalty
+
+    c_area = (BW/maxW)^2;               % normalized area
+
+    % Weights
+
+    w1 = 8;   % gain
+
+    w2 = 1;   % impedance
+
+    w3 = 10;   % axial ratio (most important for CP)
+
+    w4 = 1;   % return loss
+
+    w5 = 0.5; % area (least important)
+
+    c = w1*c_gain + w2*c_imp + w3*c_ar + w4*c_rl + w5*c_area;
+
+ 
+
+end
+
+ 
+
+%% Output function for logging
+
+function stop = outfun(varargin)
+
+    stop = false;
+
+    if nargin < 4 || isempty(fid)
+
+        return;
+
+    end
+
+    if strcmp(state,'iter') || strcmp(state,'done')
+
+        area_mm2 = (x(1)*1e3)^2;
+
+        line = sprintf('Iter %3d: W=%.2fmm, PF=%.3f, FF=%.3f, Area=%.1fmm^2, fval=%.2e\n', ...
+
+            optimValues.iteration, x(1)*1e3, x(2), x(3), area_mm2, optimValues.bestfval);
+
+        fprintf(fid, '%s', line);   % log file
+
+        fflush(fid);
+
+        fprintf(line);
+
+        fflush(stdout);
+
+        fprintf('%s', line);        % still print to screen
+
+    end
+
+end
+
+%% Antenna Builder
+
+function pcb = buildAntenna(Board_W, PFr, FFr, freq, t_met, t_diel, dielLayer, metalLayer)
+
+    pcb = pcbStack; pcb.BoardThickness = 2*t_met + t_diel;
+
+    B = antenna.Rectangle; B.Center = [0 0]; B.Length = 1.5*Board_W; B.Width = B.Length;
+
+    pcb.BoardShape = B;
+
+    P = antenna.Rectangle; P.Center = [0 0]; P.Length = Board_W; P.Width = Board_W;
+
+    C1 = antenna.Rectangle; C1.Center = [Board_W/2, Board_W/2];
+
+    C1.Length = Board_W*sqrt(2)*PFr; C1.Width = C1.Length;
+
+    C1 = rotate(C1, 45, [C1.Center,-1], [C1.Center,1]); P = P - C1;
+
+    C2 = antenna.Rectangle; C2.Center = [-Board_W/2, -Board_W/2];
+
+    C2.Length = C1.Length; C2.Width = C1.Length;
+
+    C2 = rotate(C2, 45, [C2.Center,-1], [C2.Center,1]); P = P - C2;
+
+    Ant = P;
+
+    G = antenna.Rectangle; G.Length = B.Length; G.Width = B.Width;
+
+    pcb.Layers = {Ant, dielLayer, G}; pcb.Conductor = metalLayer;
+
+    pcb.FeedLocations = [[ -FFr*Board_W/2, FFr*Board_W/2], 1];
+
+    pcb.FeedDiameter = 0.00035; pcb.ViaDiameter = 0.0003;
+
+    pcb.FeedViaModel = 'square'; pcb.FeedVoltage = 20; pcb.FeedPhase = 0;
+
+end
+
+ 
+
+%% Environement setup
+
+function logfile = nextLogFile()
+
+    % Find next logs/run_log_n.txt file
+
+    n = 1;
+
+    while isfile(sprintf('logs/run_log_%d.txt',n))
+
+        n = n + 1;
+
+    end
+
+    logfile = sprintf('logs/run_log_%d.txt',n);
+
+end
+
+
+❤️
+1 Heart reaction.
+
+Are we using FR4-epoxy for the substrate ma... by Galvez, Christian-Anthony
+10/14/2025 10:10 PM
+Galvez, Christian-Anthony
+
+Are we using FR4-epoxy for the substrate material? Currently trying to model the patch using ANSYS
+
+Yea by Salvetti, Alek
+Salvetti, Alek
+10/14/2025 11:08 PM
+
+Yea
+
+
+👍
+1 Like reaction.
+
+0.21040 mm thick for the small stackup JLC0... by Salvetti, Alek
+Salvetti, Alek
+10/14/2025 11:10 PM
+
+0.21040 mm thick for the small stackup JLC04161H-7628 (cheap one)
+
+Best sizes i got so far is: Board_W = 24.08... by Salvetti, Alek
+Salvetti, Alek
+10/14/2025 11:12 PM
+
+Best sizes i got so far is:
+
+Board_W = 24.0876604293 mm
+
+PatchFrac = 0.3407451852
+
+FeedFrac = 0.3691957985
+
+GroundSizeFactor = 1.7831839409
+
+image Basis for patch, substrate, and groun... by Galvez, Christian-Anthony
+10/15/2025 3:51 AM
+Galvez, Christian-Anthony
+
+image
+
+Basis for patch, substrate, and ground plane have been added. What approach have you tried for the feed so far?
+
+So there are two approaches, the bulky one ... by Salvetti, Alek
+Salvetti, Alek
+10/15/2025 9:31 AM
+
+So there are two approaches, the bulky one is to add two feeds 45° to each other with a phase difference of 90°. The one I am working one is just a via on the diagonal of the board.
+
+Are the two feeds coax? How much flexibilit... by Galvez, Christian-Anthony
+10/15/2025 12:28 PM
+Galvez, Christian-Anthony
+
+Are the two feeds coax? How much flexibility do we need with the antenna?
+
+They usually put a Wilkinson power divider ... by Salvetti, Alek
+Salvetti, Alek
+10/15/2025 12:31 PM
+
+They usually put a Wilkinson power divider to divide a single coax input into two feeds with a 90 degrees phase difference
+
+But any power divider with 90 phase differe... by Salvetti, Alek
+Salvetti, Alek
+10/15/2025 12:32 PM
+
+But any power divider with 90 phase difference is fine
+
+Any update regarding the supercomputer? by Galvez, Christian-Anthony
+10/21/2025 4:12 PM
+Galvez, Christian-Anthony
+
+Any update regarding the supercomputer?
+
+Begin quote, Salvetti, Alek, 10/14/2025 11:... by Salvetti, Alek
+Salvetti, Alek
+10/21/2025 4:29 PM
+
+Salvetti, Alek
+10/14/2025 11:12 PM
+Best sizes i got so far is:Board_W = 24.0876604293 mmPatchFrac = 0.3407451852FeedFrac = 0.3691957985GroundSizeFactor = 1.7831839409
+Haven't run any new simulations since this one
+
+Link https://github.com/inspireFly-VT/Pocke... by Galvez, Christian-Anthony
+10/21/2025 7:01 PM
+Galvez, Christian-Anthony
+
+https://github.com/inspireFly-VT/Pocketqube-parent-antennaBoard.git
+
+Url Preview for GitHub - inspireFly-VT/Pocketqube-parent-antennaBoard: ~2.3 GHz patch antenna board - tbd radio transciever
+GitHub - inspireFly-VT/Pocketqube-parent-antennaBoard: ~2.3 GHz patch antenna board - tbd radio transciever
+
+~2.3 GHz patch antenna board - tbd radio transciever - GitHub - inspireFly-VT/Pocketqube-parent-antennaBoard: ~2.3 GHz patch antenna board - tbd radio transciever
+
+github.com
+Link https://ieeexplore.ieee.org/document/4... by Galvez, Christian-Anthony
+10/23/2025 4:41 PM
+Galvez, Christian-Anthony
+
+https://ieeexplore.ieee.org/document/4656804
+
+ 
+
+What're y'alls thoughts on this paper?
+
+Looks cool, good luck designing it tho by Salvetti, Alek
+Salvetti, Alek
+10/23/2025 6:34 PM
+
+Looks cool, good luck designing it tho
+
+Wyman, Shane added Charalambous, Christos and 2 others to the chat and shared all chat history.
+Members added to this chat are from the Mis... by Wyman, Shane
+Wyman, Shane
+10/28/2025 8:26 PM
+
+Members added to this chat are from the Mission Ops team and have greater interest into the patch antenna - see the git hub in the chat for collaborated work. 
+
+Hey, welcome y'all! by Galvez, Christian-Anthony
+10/28/2025 9:35 PM
+Galvez, Christian-Anthony
+
+Hey, welcome y'all!
+
+
+🫡
+1 Saluting face reaction.
+
+Thoughts on this? by Galvez, Christian-Anthony
+10/30/2025 11:53 AM
+Galvez, Christian-Anthony
+
+Thoughts on this?
+
+image image image by Galvez, Christian-Anthony
+10/30/2025 11:53 AM
+Galvez, Christian-Anthony
+
+imageimageimage
+
+Does that use the parameters from the most ... by Fangman, Jack
+Fangman, Jack
+10/30/2025 1:22 PM
+
+Does that use the parameters from the most recent simulation or did you change anything?
+
+Yes, patch dimensions are now 30.7x30.7 mm ... by Galvez, Christian-Anthony
+10/30/2025 1:25 PM
+Galvez, Christian-Anthony
+
+Yes, patch dimensions are now 30.7x30.7 mm and substrate is 40.0x40.0x1.6mm. Additionally, I use a microstrip feed that's 3.25mm wide, instead of coax, and the patch has two small slits that are 0.5x4mm.
+
+
+👍
+1 Like reaction.
+
+I pushed the ANSYS files to the to-be-revie... by Galvez, Christian-Anthony
+10/30/2025 1:30 PM
+Galvez, Christian-Anthony
+
+I pushed the ANSYS files to the to-be-reviewed branch on Github.
+
+image image image by Galvez, Christian-Anthony
+11/2/2025 3:59 PM
+Galvez, Christian-Anthony
+
+imageimageimage
+
+Begin quote, Galvez, Christian-Anthony, 11/... by Galvez, Christian-Anthony
+11/3/2025 5:42 PM
+Galvez, Christian-Anthony
+
+Galvez, Christian-Anthony
+11/2/2025 3:59 PM
+📷📷📷
+~80MHz off from 2.3GHz now. What I did was change the patch material to copper and the thickness 0.035 mm
+
+image by Galvez, Christian-Anthony
+11/6/2025 1:07 PM
+Galvez, Christian-Anthony
+
+image
+
+
+👍
+1 Like reaction.
+
+How off is that? by Fangman, Jack
+Fangman, Jack
+11/6/2025 1:08 PM
+
+How off is that?
+Very nice by Salvetti, Alek
+Salvetti, Alek
+11/6/2025 1:08 PM
+
+Very nice
+
+Begin quote, Fangman, Jack, 11/6/2025 1:08 ... by Salvetti, Alek
+Salvetti, Alek
+11/6/2025 1:09 PM
+
+Fangman, Jack
+11/6/2025 1:08 PM
+How off is that?
+We want 2.305 GHz so this is perfect
+
+How is gain? by Salvetti, Alek
+Salvetti, Alek
+11/6/2025 1:09 PM
+
+How is gain?
+
+👍 by Fangman, Jack
+Fangman, Jack
+11/6/2025 1:09 PM
+
+👍
+image Gain is still low by Galvez, Christian-Anthony
+11/6/2025 1:10 PM
+Galvez, Christian-Anthony
+
+image
+
+Gain is still low
+
+
+👍
+1 Like reaction.
+
+Gain a bit better now with circular patch a... by Galvez, Christian-Anthony
+11/20/2025 12:08 PM
+Galvez, Christian-Anthony
+
+Gain a bit better now with circular patch approach. I'm hoping this will increase even more, after shifting the frequency closer
+
+image
+
+image
+
+image by Galvez, Christian-Anthony
+11/20/2025 12:09 PM
+Galvez, Christian-Anthony
+
+image
+
+The tradeoff is a bigger size; substrate is... by Galvez, Christian-Anthony
+11/20/2025 12:10 PM
+Galvez, Christian-Anthony
+
+The tradeoff is a bigger size; substrate is 48x48mm and the patch itself has a radius of 19.51994 mm
+
+Using Isola FR408HR with relative permittiv... by Galvez, Christian-Anthony
+11/20/2025 12:11 PM
+Galvez, Christian-Anthony
+
+Using Isola FR408HR with relative permittivity of 3.68
+
+Very nice by Salvetti, Alek
+Salvetti, Alek
+11/20/2025 12:30 PM
+
+Very nice
+
+Hey I see you guys asked for a review, did ... by Wyman, Shane
+Wyman, Shane
+4/7 7:09 PM
+
+Hey I see you guys asked for a review, did you update the github cause the last commit is from like a month ago?
+
+Github has been updated. Also I realized I ... by Galvez, Christian-Anthony
+4/7 8:38 PM
+Galvez, Christian-Anthony
+
+Github has been updated. Also I realized I never sent the images of what the patch looks like now. Should I go ahead and do that?
+
+
+👍
+1 Like reaction.
+
+Up to you, what’s the latest 1,1 and gain l... by Wyman, Shane
+Wyman, Shane
+4/7 9:01 PM
+
+Up to you, what’s the latest 1,1 and gain looking like
+And aspect ratio by Salvetti, Alek
+Salvetti, Alek
+4/7 9:01 PM
+
+And aspect ratio
+
+Review is appreciated as I've been running ... by Galvez, Christian-Anthony
+4/7 9:18 PM
+Galvez, Christian-Anthony
+
+Review is appreciated as I've been running into some errors with design rules checker. I suspect the way I created the footprint for the antenna was not good? There's definitely a better way of importing the ANSYS patch to KiCAD that I am unaware of. Anyhow, these are the ANSYS HFSS results from using Isola FR408HR. For FR4, expect sizes to be scaled down by 0.916188267, but slightly worse gain, s11, and axial ratio. Referred to pp. 814-823 of the Balanis textbook for the equations
+
+imageimageimageimageimageimage
+
+In the kicad did you install 2 SMA connecto... by Salvetti, Alek
+Salvetti, Alek
+4/7 9:21 PM
+
+In the kicad did you install 2 SMA connectors or 1 with a power divider?
+
+Is the strip feed on the patch also used or... by Salvetti, Alek
+Salvetti, Alek
+4/7 9:21 PM
+
+Is the strip feed on the patch also used or it is from something else?
+
+I did one coax on the edge. Installing 2 SM... by Galvez, Christian-Anthony
+4/7 9:24 PM
+Galvez, Christian-Anthony
+
+I did one coax on the edge. Installing 2 SMA connectors is definitely better, and would appreciate help doing that
+
+Are the graphs for the 2 probe feed + strip... by Salvetti, Alek
+Salvetti, Alek
+4/7 9:26 PM
+
+Are the graphs for the 2 probe feed + strip feed case or just strip feed case
+
+Begin quote, Galvez, Christian-Anthony, 4/7... by Salvetti, Alek
+Salvetti, Alek
+4/7 9:29 PM
+
+Galvez, Christian-Anthony
+4/7/2026 9:24 PM
+I did one coax on the edge. Installing 2 SMA connectors is definitely better, and would appreciate help doing that
+I mean the nice thing about having 2 SMA connectors is that I would allow us a lot of flexibility during testing, the issue is calibrating it is going to be hell. You will have to almost perfectly match the length of the cables and use a separate phase shifter (I assume the probe feed are shifter by 90 to each other) or SDR that can do multichannel transmit
+
+
+👍
+1 Like reaction.
+
+Begin quote, Salvetti, Alek, 4/7/2026 9:26 ... by Galvez, Christian-Anthony
+4/7 10:00 PM
+Galvez, Christian-Anthony
+
+Salvetti, Alek
+4/7/2026 9:26 PM
+Are the graphs for the 2 probe feed + strip feed case or just strip feed case
+Ít's for the 2 probe feed + strip feed
+
+On the patch antenna feeds:   Did you mean ... by Wyman, Shane
+Wyman, Shane
+4/29 12:02 AM
+
+On the patch antenna feeds:
+
+ 
+
+Did you mean for it be a .6mm diameter with a .3mm hole? That seems really small for a feed. I also assume that you wanted this board to be Untented hole with Horizontal Electroless platting?
+
+.6mm/.3mm via was chosen to help minimize p... by Galvez, Christian-Anthony
+4/29 9:32 AM
+Galvez, Christian-Anthony
+
+.6mm/.3mm via was chosen to help minimize parasitic inductance. Also yes to untented hole w/ horizontal electroless plating
+
+If I remember correctly, you were planning ... by Wyman, Shane
+Wyman, Shane
+4/29 12:13 PM
+
+If I remember correctly, you were planning this layer stackup right:
+
+ 
+
+Patch Antenna, no GND fill around it
+GND fill, entire layer
+No fill or anything, to be later decided
+GND fill, entire layer
+You don't have any fill zones currently in kicad and I want to make sure I remembered the layer stackup right, I will do it so don't worry about opening up the file
+
+Swap 2 and 3, the more dielectric height be... by Salvetti, Alek
+Salvetti, Alek
+4/29 12:16 PM
+
+Swap 2 and 3, the more dielectric height between patch and ground the better
+
+
+👍
+1 Like reaction.
