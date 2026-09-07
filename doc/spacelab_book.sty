@@ -27,6 +27,7 @@
 \usepackage{ae}
 \usepackage{graphicx}
 \usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
 \usepackage{fancyhdr}
 \usepackage{subfigure}
 % Compatibility shims for KOMA-Script 3.45 / LaTeX 2023 where \IfPackageLoadedF/T were renamed
@@ -64,8 +65,9 @@
 \@ifundefined{cellcolor}{\newcommand{\cellcolor}[1]{}}{}
 \makeatother
 
-% URLs font style
+% URLs font style — xurl allows breaks at any char in \path/\url (fixes page 17 CircularPatchAntenna.kicad_mod overfull)
 \urlstyle{same}
+\setlength{\emergencystretch}{3em}
 
 % Bibliography style (order of appearance)
 \bibliographystyle{unsrt}
