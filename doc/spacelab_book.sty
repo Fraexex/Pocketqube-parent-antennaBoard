@@ -29,7 +29,6 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{xurl}
 \usepackage{fancyhdr}
-\usepackage{subfigure}
 % Compatibility shims for KOMA-Script 3.45 / LaTeX 2023 where \IfPackageLoadedF/T were renamed
 \makeatletter
 \@ifundefined{IfPackageLoadedF}{\newcommand*{\IfPackageLoadedF}[2]{\@ifpackageloaded{#1}{}{#2}}}{}
@@ -55,6 +54,7 @@
 \usepackage[bottom]{footmisc}
 \usepackage{multicol}
 \usepackage{caption}                % \caption*
+\usepackage{subcaption} % for side-by-side subfigures (replaces deprecated subfigure) — Source: https://tex.stackexchange.com/a/282878 (Fran, CC BY-SA 3.0)
 \usepackage{listings}               % Codes
 \usepackage[outdir=figures/]{epstopdf}
 \usepackage{longtable}              % Multiple pages table
