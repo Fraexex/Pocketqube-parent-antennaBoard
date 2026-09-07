@@ -1,0 +1,9 @@
+\babel@toc {english}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {2.1}{\ignorespaces Final PCB stackup from \texttt {antennaBoard.kicad\_pcb}.}}{7}{table.caption.7}%
+\contentsline {table}{\numberline {2.2}{\ignorespaces Selected git history for the 2.305~GHz patch.}}{12}{table.caption.9}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Analytical radius versus substrate. Fringing correction from Eq.~\ref {eq:ae} with $h$ as in the KiCAD stack is included.}}{13}{table.caption.10}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }

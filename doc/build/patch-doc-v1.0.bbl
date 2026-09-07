@@ -1,0 +1,25 @@
+\begin{thebibliography}{1}
+
+\bibitem{balanis2005antenna}
+Constantine~A. Balanis.
+\newblock {\em Antenna Theory: Analysis and Design}.
+\newblock Wiley-Interscience, 3rd edition, 2005.
+
+\bibitem{garg2001microstrip}
+Ramesh Garg, Prakash Bhartia, Inder Bahl, and Apisak Ittipiboon.
+\newblock {\em Microstrip Antenna Design Handbook}.
+\newblock Artech House, 2001.
+
+\bibitem{shen1979resonant}
+L.~C. Shen, S.~A. Long, M.~R. Allerding, and M.~D. Walton.
+\newblock Resonant frequency of a circular disc, printed-circuit antenna.
+\newblock {\em IEEE Transactions on Antennas and Propagation}, 25(4):595--596,
+  1977.
+
+\bibitem{hammerstad1975equations}
+E.~Hammerstad and O.~Jensen.
+\newblock Accurate models for microstrip computer-aided design.
+\newblock {\em IEEE MTT-S International Microwave Symposium Digest}, pages
+  407--409, 1980.
+
+\end{thebibliography}
