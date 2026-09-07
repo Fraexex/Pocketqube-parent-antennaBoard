@@ -1,0 +1,20 @@
+# doc/.dockerignore — keep Docker context small, avoid PDF clutter
+build
+*.pdf
+*.aux
+*.log
+*.out
+*.toc
+*.lof
+*.lot
+*.nlo
+*.nls
+*.bbl
+*.blg
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+.git
+.gitignore
+Dockerfile
+.dockerignore
