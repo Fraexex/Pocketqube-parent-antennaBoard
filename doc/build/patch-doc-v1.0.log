@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.1.28)  8 SEP 2026 12:34
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (MiKTeX 24.1) (preloaded format=pdflatex 2025.1.28)  8 SEP 2026 13:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1087,7 +1087,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [2
 
-]
+]) (chapters/Methodology.tex
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1097,22 +1097,12 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [3
 
-]) (chapters/Methodology.tex
-
-Package fancyhdr Warning: \headheight is too small (12.0pt): 
-(fancyhdr)                Make it at least 14.49998pt, for example:
-(fancyhdr)                \setlength{\headheight}{14.49998pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
-
-[4
+] [4
 
 ]
 Chapter 2.
-[5
-
-{C:/Users/Legit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/iwona/ex-iwona.en
-c}]
+[5{C:/Users/Legit/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/iwona/ex-iwona.
+enc}]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1124,11 +1114,8 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 <history/10-15-2025.png, id=316, 963.6pt x 542.025pt>
 File: history/10-15-2025.png Graphic file (type png)
 <use history/10-15-2025.png>
-Package pdftex.def Info: history/10-15-2025.png  used on input line 98.
+Package pdftex.def Info: history/10-15-2025.png  used on input line 90.
 (pdftex.def)             Requested size: 418.82375pt x 235.58875pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
 
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
@@ -1139,7 +1126,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 
 [7
 
-]
+ <./history/10-15-2025.png>]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1147,7 +1134,9 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-2.49998pt}.
 
-[8 <./history/10-15-2025.png>]
+[8
+
+]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1178,18 +1167,18 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 [11
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 169--170
+Underfull \hbox (badness 10000) in paragraph at lines 163--164
 []|\T1/iwona/m/n/12 Square aper-ture patch cal-cu-la-tions
  []
 
 ) (chapters/Results.tex
-Underfull \hbox (badness 4713) in paragraph at lines 180--8
+Underfull \hbox (badness 4713) in paragraph at lines 174--8
 \T1/aett/m/n/12 YYYY-MM-DD_HHMMSS.zip \T1/iwona/m/n/12 backup in \T1/aett/m/n/1
 2 KiCAD/antennaBoard/antennaBoard-backups/
  []
 
 
-Underfull \hbox (badness 1077) in paragraph at lines 180--8
+Underfull \hbox (badness 1077) in paragraph at lines 174--8
 \T1/iwona/m/n/12 records the board state at that time. MAT-LAB logs in \T1/aett
 /m/n/12 mat-lab/logs/ \T1/iwona/m/n/12 are not
  []
@@ -1231,17 +1220,17 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 <history/10-30-2025-1.png, id=363, 1711.1428pt x 744.53156pt>
 File: history/10-30-2025-1.png Graphic file (type png)
 <use history/10-30-2025-1.png>
-Package pdftex.def Info: history/10-30-2025-1.png  used on input line 74.
+Package pdftex.def Info: history/10-30-2025-1.png  used on input line 70.
 (pdftex.def)             Requested size: 418.82375pt x 182.22438pt.
 <history/11-06-2025-1.png, id=364, 1541.00719pt x 766.36313pt>
 File: history/11-06-2025-1.png Graphic file (type png)
 <use history/11-06-2025-1.png>
-Package pdftex.def Info: history/11-06-2025-1.png  used on input line 81.
+Package pdftex.def Info: history/11-06-2025-1.png  used on input line 77.
 (pdftex.def)             Requested size: 418.82375pt x 208.27728pt.
 <history/11-20-2025-1.png, id=365, 1521.43407pt x 759.58781pt>
 File: history/11-20-2025-1.png Graphic file (type png)
 <use history/11-20-2025-1.png>
-Package pdftex.def Info: history/11-20-2025-1.png  used on input line 88.
+Package pdftex.def Info: history/11-20-2025-1.png  used on input line 84.
 (pdftex.def)             Requested size: 418.82375pt x 209.10172pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1260,17 +1249,17 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 <history/11-20-2025-2.png, id=372, 1533.47906pt x 753.5653pt>
 File: history/11-20-2025-2.png Graphic file (type png)
 <use history/11-20-2025-2.png>
-Package pdftex.def Info: history/11-20-2025-2.png  used on input line 95.
+Package pdftex.def Info: history/11-20-2025-2.png  used on input line 91.
 (pdftex.def)             Requested size: 418.82375pt x 205.81104pt.
 <history/04-07-2026-1.png, id=373, 448.67625pt x 180.675pt>
 File: history/04-07-2026-1.png Graphic file (type png)
 <use history/04-07-2026-1.png>
-Package pdftex.def Info: history/04-07-2026-1.png  used on input line 102.
+Package pdftex.def Info: history/04-07-2026-1.png  used on input line 98.
 (pdftex.def)             Requested size: 418.82375pt x 168.66008pt.
 <history/04-07-2026-2.png, id=374, 1072.005pt x 1017.8025pt>
 File: history/04-07-2026-2.png Graphic file (type png)
 <use history/04-07-2026-2.png>
-Package pdftex.def Info: history/04-07-2026-2.png  used on input line 109.
+Package pdftex.def Info: history/04-07-2026-2.png  used on input line 105.
 (pdftex.def)             Requested size: 418.82375pt x 397.64026pt.
 
 
@@ -1285,7 +1274,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 <history/04-07-2026-3.png, id=382, 1072.005pt x 1017.8025pt>
 File: history/04-07-2026-3.png Graphic file (type png)
 <use history/04-07-2026-3.png>
-Package pdftex.def Info: history/04-07-2026-3.png  used on input line 116.
+Package pdftex.def Info: history/04-07-2026-3.png  used on input line 112.
 (pdftex.def)             Requested size: 418.82375pt x 397.64026pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1302,7 +1291,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 <history/04-07-2026-5.png, id=387, 1072.005pt x 1017.8025pt>
 File: history/04-07-2026-5.png Graphic file (type png)
 <use history/04-07-2026-5.png>
-Package pdftex.def Info: history/04-07-2026-5.png  used on input line 123.
+Package pdftex.def Info: history/04-07-2026-5.png  used on input line 119.
 (pdftex.def)             Requested size: 418.82375pt x 397.64026pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1319,7 +1308,7 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 <history/04-07-2026-6.png, id=392, 1087.06125pt x 761.09344pt>
 File: history/04-07-2026-6.png Graphic file (type png)
 <use history/04-07-2026-6.png>
-Package pdftex.def Info: history/04-07-2026-6.png  used on input line 130.
+Package pdftex.def Info: history/04-07-2026-6.png  used on input line 126.
 (pdftex.def)             Requested size: 418.82375pt x 293.23672pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1344,22 +1333,22 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 <history/4-29-2026-1.png, id=404, 1000.48781pt x 895.09406pt>
 File: history/4-29-2026-1.png Graphic file (type png)
 <use history/4-29-2026-1.png>
-Package pdftex.def Info: history/4-29-2026-1.png  used on input line 156.
+Package pdftex.def Info: history/4-29-2026-1.png  used on input line 152.
 (pdftex.def)             Requested size: 218.51521pt x 195.4872pt.
 <history/4-29-2026-3.png, id=405, 1148.03906pt x 986.9372pt>
 File: history/4-29-2026-3.png Graphic file (type png)
 <use history/4-29-2026-3.png>
-Package pdftex.def Info: history/4-29-2026-3.png  used on input line 163.
+Package pdftex.def Info: history/4-29-2026-3.png  used on input line 159.
 (pdftex.def)             Requested size: 218.51521pt x 187.85132pt.
 <history/4-29-2026-2.png, id=406, 993.7125pt x 867.24pt>
 File: history/4-29-2026-2.png Graphic file (type png)
 <use history/4-29-2026-2.png>
-Package pdftex.def Info: history/4-29-2026-2.png  used on input line 175.
+Package pdftex.def Info: history/4-29-2026-2.png  used on input line 171.
 (pdftex.def)             Requested size: 218.51521pt x 190.70076pt.
 <history/4-29-2026-4.png, id=407, 1099.85907pt x 955.31906pt>
 File: history/4-29-2026-4.png Graphic file (type png)
 <use history/4-29-2026-4.png>
-Package pdftex.def Info: history/4-29-2026-4.png  used on input line 182.
+Package pdftex.def Info: history/4-29-2026-4.png  used on input line 178.
 (pdftex.def)             Requested size: 218.51521pt x 189.79222pt.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
@@ -1432,13 +1421,13 @@ Package fancyhdr Warning: \headheight is too small (12.0pt):
 ]
 Chapter 5.
 
-Underfull \hbox (badness 2237) in paragraph at lines 17--18
+Underfull \hbox (badness 2237) in paragraph at lines 15--16
 \T1/iwona/m/n/12 as \T1/aett/m/n/12 Cir-cu-larPatchV3.dxf\T1/iwona/m/n/12 /\T1/
 aett/m/n/12 .step \T1/iwona/m/n/12 and con-verted via \T1/aett/m/n/12 dxf_to_ki
 cad_mod.py \T1/iwona/m/n/12 to the
  []
 
-[31]) (chapters/Acknowledgments.tex (build/patch-doc-v1.0.bbl
+) (chapters/Acknowledgments.tex (build/patch-doc-v1.0.bbl [31]
 
 Package fancyhdr Warning: \headheight is too small (12.0pt): 
 (fancyhdr)                Make it at least 14.49998pt, for example:
@@ -1454,11 +1443,11 @@ LaTeX2e <2023-11-01> patch level 1
 L3 programming layer <2024-01-04>
  ***********
 Package rerunfilecheck Info: File `build/patch-doc-v1.0.out' has not changed.
-(rerunfilecheck)             Checksum: 3E59245DD271D206DD170937D3339F31;5764.
+(rerunfilecheck)             Checksum: C103F9D642192F589C4A288788C845AF;5705.
  ) 
 Here is how much of TeX's memory you used:
- 19628 strings out of 474486
- 327493 string characters out of 5743755
+ 19625 strings out of 474486
+ 327475 string characters out of 5743755
  1938542 words of memory out of 5000000
  41418 multiletter control sequences out of 15000+600000
  611067 words of font info for 72 fonts, out of 8000000 for 9000
@@ -1470,9 +1459,9 @@ ona/iwonab.pfb><C:/Users/Legit/AppData/Local/Programs/MiKTeX/fonts/type1/nowack
 i/iwona/iwonar.pfb><C:/Users/Legit/AppData/Local/Programs/MiKTeX/fonts/type1/no
 wacki/iwona/iwonari.pfb><C:/Users/Legit/AppData/Local/Programs/MiKTeX/fonts/typ
 e1/public/amsfonts/symbols/msam10.pfb>
-Output written on build/patch-doc-v1.0.pdf (43 pages, 1785771 bytes).
+Output written on build/patch-doc-v1.0.pdf (43 pages, 1778260 bytes).
 PDF statistics:
- 537 PDF objects out of 1000 (max. 8388607)
- 116 named destinations out of 1000 (max. 500000)
+ 533 PDF objects out of 1000 (max. 8388607)
+ 113 named destinations out of 1000 (max. 500000)
  353 words of extra memory for PDF output out of 10000 (max. 10000000)
 
