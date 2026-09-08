@@ -93,6 +93,13 @@
 \makenomenclature
 \setlength\nomlabelwidth{2cm}
 
+% Page breaks: every \section after the first in each chapter (2.2, 2.3, 3.2, 3.3, etc.) starts on a new page
+% Sections ending in .1 (2.1, 3.1, 4.1) stay where they are; \subsection like 3.3.1 is unaffected
+\usepackage{etoolbox}
+\makeatletter
+\pretocmd{\section}{\ifnum\value{section}>0 \clearpage\fi}{}{}
+\makeatother
+
 % Table cell size limit and alignment
 \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
 \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}

@@ -1,4 +1,7 @@
 # Ansys
 *.tmp
 ansys/Patch 2.aedtresults/*
-doc/build/references/
+# Build artifacts - do not commit LaTeX build output
+doc/build/
+build/
+doc/patch-doc-v1.0.pdf
